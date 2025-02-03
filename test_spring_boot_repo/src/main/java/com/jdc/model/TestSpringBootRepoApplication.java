@@ -1,4 +1,4 @@
-package com.jdc.akh;
+package com.jdc.model;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
