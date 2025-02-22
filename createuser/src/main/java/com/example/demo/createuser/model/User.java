@@ -16,18 +16,23 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private String username;
     private String name;
     private String phone;
     private String nrc;
     private String address;
+    private String location;
+    private String password;
     
-    public User(String name, String phone, String nrc, String address) {
+    public User(String username,String name, String phone, String nrc, String address, String location, String password) {
+        this.username = username;
         this.name = name;
         this.phone = phone;
         this.nrc = nrc;
         this.address = address;
-    }
+        this.location = location;
+        this.password = password;
 
-    
+    }
 
 }

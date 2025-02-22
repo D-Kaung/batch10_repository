@@ -1,18 +1,19 @@
 package com.example.demo.createuser.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.createuser.model.User;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
 
-    List<User> findByname(String name);
+    List<User> findByNameContainingOrPhoneContainingOrNrcContaining(String name, String phone, String nrc);
 
-    List<User> findBynrc(String nrc);
+    User findByName(String name);
 
-    List<User> findByphone(String phone);
-
-
+    Optional<User> findByUsername(String username);
 }

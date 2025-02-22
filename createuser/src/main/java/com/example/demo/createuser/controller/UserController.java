@@ -1,44 +1,66 @@
 package com.example.demo.createuser.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.ui.Model; 
-
+import com.example.demo.createuser.repository.UserRepository;
 import com.example.demo.createuser.model.User;
-import com.example.demo.createuser.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+import java.util.Optional;
 
 @Controller
-@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserRepository userRepository;
 
-    @GetMapping("/create")
-    public String showCreateForm(Model model) {
+    // Show login form
+    @GetMapping("/login")
+    public String loginPage(Model model) {
         model.addAttribute("user", new User());
-        return "index";
+        return "login";
     }
 
-    @PostMapping("/create")
-    public String createUser(@ModelAttribute User user) {
-        userService.createUser(user);
-        return "redirect:/users/list";
+    // Process login
+    @PostMapping("/login")
+    public String login(@RequestParam String username,
+                        @RequestParam String password,
+                        Model model) {
+
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isPresent() && user.get().getPassword().equals(password)) {
+            return "redirect:/home";  // Redirect if login is successful
+        } else {
+            model.addAttribute("error", "Invalid username or password");
+            return "login";  // Show login page again with error message
+        }
     }
 
-    @GetMapping("/list")
-    public String listUsers(@RequestParam(required = false) String name,
-                            @RequestParam(required = false) String nrc,
-                            @RequestParam(required = false) String phone,
-                            Model model) {
-        model.addAttribute("users", userService.filterUsers(name, nrc, phone));
-        return "user-list";
+    // Home page
+    @GetMapping("/home")
+    public String home() {
+        return "home";
     }
 
+    // Show filter form
+    @GetMapping("/filter")
+    public String filterForm() {
+        return "filter";
+    }
+
+    // Process user filtering
+    @PostMapping("/filter")
+    public String filterUsers(@RequestParam(required = false) String name,
+                              @RequestParam(required = false) String phone,
+                              @RequestParam(required = false) String nrc,
+                              Model model) {
+        List<User> users = userRepository.findByNameContainingOrPhoneContainingOrNrcContaining(name, phone, nrc);
+        model.addAttribute("users", users);
+        return "filter";
+    }
 }
