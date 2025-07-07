@@ -1,27 +1,28 @@
 package com.steve.ev.Contoller;
 
+import com.steve.ev.Dto.TransactionDto;
 import com.steve.ev.Entity.Transaction;
-import com.steve.ev.Repository.TransactionRepo;
+import com.steve.ev.Service.DataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/transactions")
+@Controller
 public class TransactionController {
 
-    private final TransactionRepo transactionRepo;
+    private final DataService dataService;
 
     @Autowired
-    public TransactionController(TransactionRepo transactionRepo) {
-        this.transactionRepo = transactionRepo;
+    public TransactionController(DataService dataService) {
+        this.dataService = dataService;
     }
 
-    @GetMapping
-    public List<Transaction> getAll() {
-        return transactionRepo.findAll();
+    @ResponseBody
+    @GetMapping("/api/transactionDto")
+    public List<TransactionDto> getAllTransactions() {
+        return dataService.getAllTransactionFromDto();
     }
 }

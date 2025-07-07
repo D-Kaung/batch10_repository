@@ -15,13 +15,13 @@ public class WebSocketConfig implements WebSocketConfigurer {
     private final OcppWebSocketHandler ocppWebSocketHandler;
 
     @Autowired
-    public WebSocketConfig(OcppWebSocketHandler ocppWebSocketHandler) {
+    public WebSocketConfig(OcppWebSocketHandler ocppWebSocketHandler)  {
         this.ocppWebSocketHandler = ocppWebSocketHandler;
     }
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-       registry.addHandler(ocppWebSocketHandler, "/ocpp/{chargeBoxId}")
+       registry.addHandler(ocppWebSocketHandler, "/testing/ev/{chargeBoxId}")
                .setAllowedOrigins("*");
     }
 }

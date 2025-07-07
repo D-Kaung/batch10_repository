@@ -35,9 +35,21 @@ public class OcppService {
                 case "StatusNotification":
                     handleStatusNotification(session, uniqueId);
                     break;
+
+                case "TriggerMessage":
+                    handleTriggerMessage(session, uniqueId);
+                    break;
+
             }
         }
     }
+
+    private void handleTriggerMessage(WebSocketSession session, String uid)
+            throws IOException {
+        String response = String.format("[3,\"%s\",{\"status\":\"Accepted\"}]", uid);
+        session.sendMessage(new TextMessage(response));
+    }
+
     private void handleStatusNotification(WebSocketSession session, String uid) throws IOException {
         String response = String.format("[3,\"%s\",{\"currentTime\":\"%s\"status\":\"Available\"}]",
                 uid, LocalDateTime.now());
@@ -45,18 +57,16 @@ public class OcppService {
     }
 
     private void handleBootNotification(WebSocketSession session, String uid) throws IOException {
-    String response = String.format("[3,\"%s\",{\"currentTime\":\"%s\",\"interval\":300,\"" +
-                    "status\":\"Accepted\"}]",
-            uid, LocalDateTime.now());
-    session.sendMessage(new TextMessage(response));
-
+        String response = String.format("[3,\"%s\",{\"currentTime\":\"%s\",\"interval\":300,\"" +
+                        "status\":\"Accepted\"}]",
+                uid, LocalDateTime.now());
+        session.sendMessage(new TextMessage(response));
     }
 
-private void handleAuthorize(WebSocketSession session, String uid, JsonNode payload) throws IOException {
-    String idTag = payload.get("idTag").asText();
-    // Assume always authorized
-    String response = String.format("[3,\"%s\",{\"idTagInfo\":{\"status\":\"Accepted\"}}]", uid);
-    session.sendMessage(new TextMessage(response));
-
+    private void handleAuthorize(WebSocketSession session, String uid, JsonNode payload) throws IOException {
+        String idTag = payload.get("idTag").asText();
+        // Assume always authorized
+        String response = String.format("[3,\"%s\",{\"idTagInfo\":{\"status\":\"Accepted\"}}]", uid);
+        session.sendMessage(new TextMessage(response));
     }
- }
+}

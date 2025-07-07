@@ -1,22 +1,9 @@
-package com.steve.ev.Entity;
-
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+package com.steve.ev.Dto;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@Table(name = "transaction")
-public class Transaction {
+public class TransactionDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String idTag;
     private int connectorId;
     private LocalDateTime startTime;
@@ -24,12 +11,14 @@ public class Transaction {
     private int meterStart;
     private int meterStop;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public TransactionDto(String idTag, int connectorId, LocalDateTime startTime,
+                          LocalDateTime stopTime, int meterStart, int meterStop) {
+        this.idTag = idTag;
+        this.connectorId = connectorId;
+        this.startTime = startTime;
+        this.stopTime = stopTime;
+        this.meterStart = meterStart;
+        this.meterStop = meterStop;
     }
 
     public String getIdTag() {
